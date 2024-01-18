@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            background-color: #3498db;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #9b59b6; 
+        }
+        .flex-container {
+            display: flex;
+            text-align: center;
+            border-radius: 5px;
+        }
+        .flex-container .button-link {
+            display: inline-block;
+            padding: 10px 10px;
+            font-size: 30px;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100px;
+            min-height: 100px;
+            background-color: lightgray;
+            flex: 1 1 0%;
+            transition: background-color 0.3s ease;
+        }
+        .button-link:hover {
+            background-color: gray;
+        }
+        #outcome {
+            width: 100px;
+            height: 20px;
+            background-color: lightgray;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id='header' style="text-align:center">Tic Tac Toe</h1>
+    <div class="flex-container">
+        <div class="flex-container" style="flex-direction: column;">
+            <div class="button-link" id="outcome11" onclick="changeSymbol(this.id);"></div> 
+            <div class="button-link" id="outcome12" onclick="changeSymbol(this.id);"></div> 
+            <div class="button-link" id="outcome13" onclick="changeSymbol(this.id);"></div> 
+        </div>
+        <div class="flex-container" style="flex-direction: column;">
+            <div class="button-link" id="outcome21" onclick="changeSymbol(this.id);"></div> 
+            <div class="button-link" id="outcome22" onclick="changeSymbol(this.id);"></div> 
+            <div class="button-link" id="outcome23" onclick="changeSymbol(this.id);"></div> 
+        </div>
+        <div class="flex-container" style="flex-direction: column;">
+            <div class="button-link" id="outcome31" onclick="changeSymbol(this.id);"></div> 
+            <div class="button-link" id="outcome32" onclick="changeSymbol(this.id);"></div> 
+            <div class="button-link" id="outcome33" onclick="changeSymbol(this.id);"></div> 
+        </div>
+    </div>
+    <div id="outcome"></div>
+
+    <script>
+        var playerturn = 'X';
+        var spaceCount = 1;
+        var turnarray = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', '']
+        ];
+        var limitCount = turnarray.length * turnarray[0].length;
+
+        function changeSymbol(playerplace) {
+        var cell = document.getElementById(playerplace);
+        if (cell.innerText === '') {
+            // Get row and column from the id
+            var row = parseInt(playerplace.charAt(playerplace.length - 1)) - 1;
+            var col = parseInt(playerplace.charAt(playerplace.length - 2)) - 1;
+
+            // Update turnarray
+            turnarray[row][col] = playerturn;
+
+            // Check for a win
+            checkWin(playerturn);
+
+            // Update the visual representation
+            if (outcome.innerText === "") {cell.innerText = playerturn;}
+
+            // Toggle player turn
+            playerturn = (playerturn === 'X') ? 'O' : 'X';
+            
+            if (spaceCount >= limitCount) {
+                document.getElementById('outcome').innerText = 'tie game';
+                endGame();
+            }
+            spaceCount++;
+        }
+    }
+
+        function checkWin(playerturn) {
+            for (var i = 0; i <= 2; i++) {
+                if (
+                    (turnarray[i][0] === playerturn && turnarray[i][1] === playerturn && turnarray[i][2] === playerturn) ||
+                    (turnarray[0][i] === playerturn && turnarray[1][i] === playerturn && turnarray[2][i] === playerturn)
+                ) {
+                    document.getElementById('outcome').innerText = playerturn + ' player wins';
+                    endGame()
+                    return;
+                }
+            }
+            if (
+                    (turnarray[0][0] === playerturn && turnarray[1][1] === playerturn && turnarray[2][2] === playerturn) ||
+                    (turnarray[0][2] === playerturn && turnarray[1][1] === playerturn && turnarray[2][0] === playerturn)
+                ) {
+                    document.getElementById('outcome').innerText = playerturn + ' player wins';
+                    endGame()
+                    return;
+                }
+        }
+
+        function endGame() {
+            turnarray = [
+                ['T', 'T', 'T'],
+                ['I', 'A', 'O'],
+                ['C', 'C', 'E']
+            ];
+            for (var i = 1; i <= 3; i++) {
+                for (var j = 1; j <= 3; j++) {
+                    var buttonId = 'outcome' + i + j;
+                    document.getElementById(buttonId).innerText = turnarray[i - 1][j - 1];
+                }
+            }
+        }
+    </script>
+</body>
+</html>
